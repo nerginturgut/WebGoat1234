@@ -104,7 +104,7 @@ jobs:
         transform: all # veya specific transformations
 
     - name: Upload SARIF results
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: sarif-results-${{matrix.language}}
         path: processed-${{matrix.language}}.sarif    
