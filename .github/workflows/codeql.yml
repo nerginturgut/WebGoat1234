@@ -17,7 +17,7 @@ on:
   pull_request:
     branches: [ "main" ]
   schedule:
-    - cron: '19 19 * * 3'
+    - cron: '38 18 * * 5'
 
 jobs:
   analyze:
@@ -58,9 +58,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-    
-    - name: SARIF Multitool
-      uses: microsoft/sarif-actions@v0.1
+
+      
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
@@ -90,8 +89,22 @@ jobs:
         echo '  make bootstrap'
         echo '  make release'
         exit 1
-
+        
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
       with:
         category: "/language:${{matrix.language}}"
+        output: sarif-results
+
+    - name: SARIF Multitool
+      uses: microsoft/sarif-multitool@v0.1
+      with:
+        input: sarif-results/${{matrix.language}}.sarif
+        output: processed-${{matrix.language}}.sarif
+        transform: all # veya specific transformations
+
+    - name: Upload SARIF results
+      uses: actions/upload-artifact@v2
+      with:
+        name: sarif-results-${{matrix.language}}
+        path: processed-${{matrix.language}}.sarif    
