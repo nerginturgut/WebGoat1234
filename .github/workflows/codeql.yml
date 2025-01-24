@@ -95,9 +95,9 @@ jobs:
       with:
         category: "/language:${{matrix.language}}"
         output: sarif-results
-
+    
     - name: SARIF Multitool
-      uses: microsoft/sarif-multitool@v0.1
+      uses: microsoft/sarif-actions@v0.1
       with:
         input: sarif-results/${{matrix.language}}.sarif
         output: processed-${{matrix.language}}.sarif
